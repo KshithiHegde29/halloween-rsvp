@@ -83,6 +83,8 @@ function render(){
     var sel=A[s.k]||""; var bs=[];
     s.o.forEach(function(o){var b=el("button",{type:"button",className:"choice",textContent:o});b.setAttribute("aria-pressed",String(o===sel));b.onclick=function(){sel=o;bs.forEach(function(x){x.setAttribute("aria-pressed",String(x===b))})};bs.push(b);card.appendChild(b)});
     getVal=function(){return sel};
+    } else if(s.t==="info"){
+    getVal=function(){return "seen"};
   } else {
     var f=el("input",{type:"file",accept:"image/*"}); f.setAttribute("aria-label","Choose a photo of your face");
     var pv=el("img",{className:"prev",alt:"Your mugshot preview"}); pv.hidden=!photoB64; if(photoB64)pv.src="data:image/jpeg;base64,"+photoB64;
