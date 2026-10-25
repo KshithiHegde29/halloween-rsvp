@@ -59,6 +59,8 @@ input[type=file]::file-selector-button{font:inherit;font-size:16px;min-height:48
  .row{gap:8px}
 }
 @media (max-width:340px){.row{flex-direction:column-reverse}}
+ .ex{display:block;width:100%;padding:8px 12px;margin-bottom:8px;border:1px dashed var(--ln);color:var(--mu);font-size:15px;line-height:1.35;font-style:italic;-webkit-user-select:none;user-select:none;pointer-events:none}
+.chips{display:block}
 </style>
 </head>
 <body>
@@ -101,7 +103,7 @@ function render(){
   if(s.t==="text"){
     var inp=el("input",{type:"text",maxLength:200,value:A[s.k]||"",ariaLabel:s.h}); inp.setAttribute("aria-label",s.h);
     card.appendChild(inp); getVal=function(){return inp.value.trim()};
-    if(s.c){var ch=el("div",{className:"chips"});s.c.forEach(function(c){ch.appendChild(el("button",{type:"button",textContent:c,onclick:function(){inp.value=c;inp.focus()}}))});card.appendChild(el("p",{className:"q",textContent:"Need ideas? Tap one:",style:"margin:14px 0 0"}));card.appendChild(ch)}
+    if(s.c){var ch=el("div",{className:"chips"});s.c.forEach(function(c){ch.appendChild(el("span",{className:"ex",textContent:c}))});card.appendChild(el("p",{className:"q",textContent:"Examples (don't copy these, make up your own):",style:"margin:14px 0 0"}));card.appendChild(ch)}
   } else if(s.t==="choice"){
     var sel=A[s.k]||""; var bs=[];
     s.o.forEach(function(o){var b=el("button",{type:"button",className:"choice",textContent:o});b.setAttribute("aria-pressed",String(o===sel));b.onclick=function(){sel=o;bs.forEach(function(x){x.setAttribute("aria-pressed",String(x===b))})};bs.push(b);card.appendChild(b)});
@@ -118,7 +120,7 @@ function render(){
   card.appendChild(err);
   var row=el("div",{className:"row"});
   if(step>0)row.appendChild(el("button",{type:"button",textContent:"Back",onclick:function(){A[s.k]=getVal();step--;render()}}));
-  row.appendChild(el("button",{type:"button",className:"go",textContent:"Next",onclick:function(){var v=getVal();if(!v){err.textContent="You can't skip this one, suspect.";return}A[s.k]=v;if(s.k==="answer"&&v.indexOf("afar")>-1){persuade();return}step++;render()}}));
+  row.appendChild(el("button",{type:"button",className:"go",textContent:"Next",onclick:function(){var v=getVal();if(!v){err.textContent="You can't skip this one, suspect.";return}if(s.c&&s.c.some(function(x){return x.toLowerCase()===v.toLowerCase()})){err.textContent="That one is just an example. Make up your own, suspect.";return}A[s.k]=v;if(s.k==="answer"&&v.indexOf("afar")>-1){persuade();return}step++;render()}}));
   card.appendChild(row); app.appendChild(card);
   var first=card.querySelector("input[type=text]"); if(first)first.focus();
 }
