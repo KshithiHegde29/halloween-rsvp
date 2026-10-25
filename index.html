@@ -132,7 +132,7 @@ function review(){
   var row=el("div",{className:"row"});
   row.appendChild(el("button",{type:"button",textContent:"Back",onclick:function(){step=steps.length-1;render()}}));
   var go=el("button",{type:"button",className:"go",textContent:"Send my RSVP",onclick:function(){
-    go.disabled=true;go.textContent="Sending...";
+    go.disabled=true;go.textContent="Sending...(I vibe coded this so obv it takes some time to send, dont reload the page lol thx)";
     var body=JSON.stringify({token:CONFIG.token,hp:document.getElementById("hp").value,name:A.name,answer:A.answer,bring:A.bring,secret:A.secret,photoNote:A.photoNote,costume:A.costume,photo:photoB64});
     fetch(CONFIG.scriptUrl,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:body}).then(done).catch(function(){go.disabled=false;go.textContent="Send my RSVP";err.textContent="Could not send. Check your connection and try again."});
   }});
