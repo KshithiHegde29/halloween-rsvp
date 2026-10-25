@@ -107,7 +107,7 @@ function persuade(){
   var card=el("div",{className:"card"}), err=el("p",{className:"err",role:"alert"});
   card.appendChild(el("h2",{textContent:"Not so fast, "+A.name+"."}));
   card.appendChild(el("p",{className:"q",textContent:"The ghosts already set a place for you at the table. The skeletons are coming and they have no stomachs, so you cannot lose the snack contest to them. Also, the killer needs at least one person to blame, and you are the perfect fit."}));
-  card.appendChild(el("p",{className:"q",textContent:"Think again. Your costume is probably better than Kevin's."}));
+  card.appendChild(el("p",{className:"q",textContent:"Think again. Your costume is probably better than Anirudh's anyway."}));
   var row=el("div",{className:"row"});
   row.appendChild(el("button",{type:"button",className:"go",textContent:"Fine, I'll come",onclick:function(){A.answer="I'll be there, dead or alive";step=2;render()}}));
   var no=el("button",{type:"button",textContent:"Still no",onclick:function(){
