@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Dead Man's Midnight: RSVP</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#14101c"><title>Dead Man's Midnight: RSVP</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Creepster&family=Special+Elite&display=swap">
 <style>
 :root{--bg:#14101c;--fg:#f3ead8;--ac:#ff7a1a;--mu:#c9bfd6;--ln:#3a3050;--panel:#1d1729}
@@ -36,6 +36,29 @@ button:hover{filter:brightness(1.2)}
 .wanted{font-family:Creepster,cursive;color:var(--ac);text-align:center;font-size:30px;margin-top:6px}
 .hp{position:absolute;left:-9999px}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+/* ===== Mobile fixes (Android + iPhone) ===== */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;overflow-x:hidden;background:#14101c;color-scheme:dark}
+body{min-height:100vh;min-height:100dvh;overflow-wrap:anywhere;-webkit-tap-highlight-color:transparent}
+body::before{inset:0;animation-name:drift2}
+@keyframes drift2{to{transform:scale(1.08)}}
+main{width:100%;padding:calc(24px + env(safe-area-inset-top,0px)) calc(16px + env(safe-area-inset-right,0px)) calc(48px + env(safe-area-inset-bottom,0px)) calc(16px + env(safe-area-inset-left,0px))}
+input[type=text],textarea,button{-webkit-appearance:none;appearance:none;border-radius:0;font-size:16px}
+button{touch-action:manipulation;line-height:1.3;min-height:48px}
+button:disabled{opacity:.7;cursor:wait}
+.choice{white-space:normal;line-height:1.35}
+.chips button{white-space:normal;text-align:left;max-width:100%;min-height:44px}
+input[type=file]{width:100%;font-size:16px;color:var(--mu)}
+input[type=file]::file-selector-button{font:inherit;font-size:16px;min-height:48px;padding:10px 16px;margin-right:12px;color:#14101c;background:var(--ac);border:2px solid var(--ac);border-radius:0;cursor:pointer}
+.prev{max-height:50vh;width:auto;object-fit:contain}
+.info{font-size:15px;line-height:1.4}
+@media (max-width:480px){
+ body{font-size:17px}
+ .card{padding:18px 16px}
+ h1{font-size:clamp(40px,13vw,60px)}
+ h2{font-size:clamp(28px,8.5vw,34px)}
+ .row{gap:8px}
+}
+@media (max-width:340px){.row{flex-direction:column-reverse}}
 </style>
 </head>
 <body>
@@ -128,15 +151,18 @@ function declined(){
 function review(){
   var card=el("div",{className:"card"}), err=el("p",{className:"err",role:"alert"});
   card.appendChild(el("h2",{textContent:"Sign your confession"}));
-  card.appendChild(el("p",{className:"q",textContent:A.name+" · "+A.answer+" · bringing: "+A.bring}));
+  card.appendChild(el("p",{className:"q",textContent:A.name+" · "+A.answer}));
   var row=el("div",{className:"row"});
   row.appendChild(el("button",{type:"button",textContent:"Back",onclick:function(){step=steps.length-1;render()}}));
+  var note=el("p",{className:"q",role:"status",textContent:""});
+  note.style.color="#ff7a1a";
   var go=el("button",{type:"button",className:"go",textContent:"Send my RSVP",onclick:function(){
-    go.disabled=true;go.textContent="Sending...(I vibe coded this so obv it takes some time to send, dont reload the page lol thx)";
-    var body=JSON.stringify({token:CONFIG.token,hp:document.getElementById("hp").value,name:A.name,answer:A.answer,bring:A.bring,secret:A.secret,photoNote:A.photoNote,costume:A.costume,photo:photoB64});
-    fetch(CONFIG.scriptUrl,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:body}).then(done).catch(function(){go.disabled=false;go.textContent="Send my RSVP";err.textContent="Could not send. Check your connection and try again."});
+    go.disabled=true;go.textContent="Sending...";
+    note.textContent="Sending... (I vibe coded this so obv it takes some time to send, dont reload the page lol thx)";
+    var body=JSON.stringify({token:CONFIG.token,hp:document.getElementById("hp").value,name:A.name,answer:A.answer,secret:A.secret,photoNote:A.photoNote,costume:A.costume,photo:photoB64});
+    fetch(CONFIG.scriptUrl,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:body}).then(done).catch(function(){go.disabled=false;go.textContent="Send my RSVP";note.textContent="";err.textContent="Could not send. Check your connection and try again."});
   }});
-  row.appendChild(go);card.appendChild(row);card.appendChild(err);app.appendChild(card);
+  row.appendChild(go);card.appendChild(row);card.appendChild(note);card.appendChild(err);app.appendChild(card);
 }
 function done(){
   document.getElementById("pg").style.width="100%"; app.textContent="";
